@@ -7,6 +7,7 @@ import (
 	"github.com/google/uuid"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
+	"gitlab.com/tozd/go/errors"
 
 	"gitlab.com/tozd/identifier"
 )
@@ -74,4 +75,16 @@ func TestJSON(t *testing.T) {
 	err = json.Unmarshal(data, &y)
 	assert.NoError(t, err)
 	assert.Equal(t, x.ID, y.ID)
+}
+
+func TestFromStringError(t *testing.T) {
+	t.Parallel()
+
+	_, err := identifier.FromString("xxx")
+	assert.Error(t, err)
+	assert.Equal(t, "xxx", errors.AllDetails(err)["value"])
+
+	assert.PanicsWithError(t, identifier.ErrInvalidIdentifier.Error(), func() {
+		identifier.MustFromString("xxx")
+	})
 }
