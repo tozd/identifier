@@ -13,6 +13,8 @@ import (
 // TODO: Convert to a fuzzing test and a benchmark.
 
 func TestFromUUID(t *testing.T) {
+	t.Parallel()
+
 	for i := 0; i < 100000; i++ {
 		u := uuid.New()
 		i := identifier.FromUUID(u)
@@ -25,6 +27,8 @@ func TestFromUUID(t *testing.T) {
 }
 
 func TestFromRandom(t *testing.T) {
+	t.Parallel()
+
 	for i := 0; i < 100000; i++ {
 		i := identifier.New()
 		assert.Len(t, i, 16)
@@ -36,6 +40,8 @@ func TestFromRandom(t *testing.T) {
 }
 
 func TestValid(t *testing.T) {
+	t.Parallel()
+
 	assert.False(t, identifier.Valid(""))
 	assert.False(t, identifier.Valid("42"))
 	assert.True(t, identifier.Valid("CDEFGHJKLMNPQRSTUVWXYZ"))

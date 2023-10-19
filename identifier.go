@@ -60,11 +60,11 @@ func FromReader(r io.Reader) Identifier {
 	if err != nil {
 		panic(errors.WithStack(err))
 	}
-	return FromUUID(uuid.UUID(data))
+	return Identifier(data)
 }
 
 // Valid returns true if id string looks like a valid identifier.
-func Valid(id string) (res bool) {
+func Valid(id string) (res bool) { //nolint:nonamedreturns
 	if !idRegex.MatchString(id) {
 		return false
 	}
