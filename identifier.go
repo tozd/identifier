@@ -47,6 +47,14 @@ func FromString(data string) (Identifier, errors.E) {
 	return Identifier(*(*[16]byte)(res[len(res)-16:])), nil
 }
 
+func MustFromString(data string) Identifier {
+	i, err := FromString(data)
+	if err != nil {
+		panic(err)
+	}
+	return i
+}
+
 // New returns a new random identifier.
 func New() Identifier {
 	return MustFromReader(rand.Reader)
