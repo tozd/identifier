@@ -12,7 +12,7 @@ Features:
 - Identifiers have 128 bits of entropy, making them suitable as global identifiers.
 - By default identifiers are random, but you can convert existing
   [UUIDs](https://en.wikipedia.org/wiki/Universally_unique_identifier).
-- They are encoded into readable base 58 strings always of length 22 characters.
+- They are encoded into readable base 58 strings always of 22 characters in length.
 
 ## Installation
 
