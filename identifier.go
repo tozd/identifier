@@ -13,8 +13,11 @@ import (
 )
 
 const (
-	idLength = 22
+	stringLength   = 22
+	bytesMinLength = 16
 )
+
+var ErrInvalidIdentifier = errors.Base("invalid identifier")
 
 var idRegex = regexp.MustCompile(`^[123456789ABCDEFGHJKLMNPQRSTUVWXYZabcdefghijkmnopqrstuvwxyz]{22}$`)
 
@@ -22,8 +25,8 @@ type Identifier [16]byte
 
 func (i Identifier) String() string {
 	res := base58.Encode(i[:])
-	if len(res) < idLength {
-		return strings.Repeat("1", idLength-len(res)) + res
+	if len(res) < stringLength {
+		return strings.Repeat("1", stringLength-len(res)) + res
 	}
 	return res
 }
@@ -48,12 +51,16 @@ func FromUUID(data uuid.UUID) Identifier {
 
 func FromString(data string) (Identifier, errors.E) {
 	res := base58.Decode(data)
-	if len(res) < 16 {
-		return Identifier{}, errors.Errorf(`invalid identifier data length: %d`, len(res))
+	// Decode returns an empty slice if data contains a character outside of base58.
+	// But we care about too short strings here too.
+	if len(res) < bytesMinLength {
+		return Identifier{}, errors.WithDetails(ErrInvalidIdentifier, "value", data)
 	}
-	for i := 0; i+16 < len(res); i++ {
+	// String might be too long, in that case we require extra bytes at the beginning
+	// to be zero (or character "1" in base58), i.e., zero left padding.
+	for i := 0; i+bytesMinLength < len(res); i++ {
 		if res[i] != 0 {
-			return Identifier{}, errors.Errorf(`invalid extra byte: %x`, res[i])
+			return Identifier{}, errors.WithDetails(ErrInvalidIdentifier, "value", data)
 		}
 	}
 	// We take the last 16 bytes.
