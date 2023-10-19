@@ -1,6 +1,7 @@
 package identifier_test
 
 import (
+	"encoding/json"
 	"testing"
 
 	"github.com/google/uuid"
@@ -54,4 +55,23 @@ func TestValid(t *testing.T) {
 	assert.True(t, identifier.Valid("2111111111111111111111"))
 	assert.True(t, identifier.Valid("1111111111111111211111"))
 	assert.True(t, identifier.Valid("1111111111111111111111"))
+}
+
+type testStruct struct {
+	ID identifier.Identifier `json:"id"`
+}
+
+func TestJSON(t *testing.T) {
+	t.Parallel()
+
+	x := testStruct{
+		ID: identifier.New(),
+	}
+	data, err := json.Marshal(x)
+	assert.NoError(t, err)
+	assert.Equal(t, `{"id":"`+x.ID.String()+`"}`, string(data))
+	var y testStruct
+	err = json.Unmarshal(data, &y)
+	assert.NoError(t, err)
+	assert.Equal(t, x.ID, y.ID)
 }

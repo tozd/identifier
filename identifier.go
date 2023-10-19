@@ -28,6 +28,19 @@ func (i Identifier) String() string {
 	return res
 }
 
+func (i *Identifier) UnmarshalText(text []byte) error {
+	ii, err := FromString(string(text))
+	if err != nil {
+		return err
+	}
+	*i = ii
+	return nil
+}
+
+func (i Identifier) MarshalText() ([]byte, error) {
+	return []byte(i.String()), nil
+}
+
 // FromUUID returns an UUID encoded as an identifier.
 func FromUUID(data uuid.UUID) Identifier {
 	return Identifier(data)
