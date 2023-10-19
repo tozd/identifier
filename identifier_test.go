@@ -22,11 +22,13 @@ func TestFromUUID(t *testing.T) {
 		s := i.String()
 		assert.Len(t, s, 22)
 		require.True(t, identifier.Valid(s))
-		assert.Equal(t, i, identifier.FromString(s))
+		ii, err := identifier.FromString(s)
+		assert.NoError(t, err)
+		assert.Equal(t, i, ii)
 	}
 }
 
-func TestFromRandom(t *testing.T) {
+func TestNew(t *testing.T) {
 	t.Parallel()
 
 	for i := 0; i < 100000; i++ {
@@ -35,7 +37,9 @@ func TestFromRandom(t *testing.T) {
 		s := i.String()
 		assert.Len(t, s, 22)
 		require.True(t, identifier.Valid(s))
-		assert.Equal(t, i, identifier.FromString(s))
+		ii, err := identifier.FromString(s)
+		assert.NoError(t, err)
+		assert.Equal(t, i, ii)
 	}
 }
 

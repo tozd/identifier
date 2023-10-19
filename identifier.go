@@ -33,46 +33,49 @@ func FromUUID(data uuid.UUID) Identifier {
 	return Identifier(data)
 }
 
-func FromString(data string) Identifier {
+func FromString(data string) (Identifier, errors.E) {
 	res := base58.Decode(data)
 	if len(res) < 16 {
-		panic(errors.Errorf(`invalid identifier data length: %d`, len(res)))
+		return Identifier{}, errors.Errorf(`invalid identifier data length: %d`, len(res))
 	}
 	for i := 0; i+16 < len(res); i++ {
 		if res[i] != 0 {
-			panic(errors.Errorf(`invalid extra byte: %x`, res[i]))
+			return Identifier{}, errors.Errorf(`invalid extra byte: %x`, res[i])
 		}
 	}
 	// We take the last 16 bytes.
-	return Identifier(*(*[16]byte)(res[len(res)-16:]))
+	return Identifier(*(*[16]byte)(res[len(res)-16:])), nil
 }
 
 // New returns a new random identifier.
 func New() Identifier {
-	return FromReader(rand.Reader)
+	return MustFromReader(rand.Reader)
 }
 
 // NewRandom returns a new random identifier using r as a source of randomness.
-func FromReader(r io.Reader) Identifier {
+func FromReader(r io.Reader) (Identifier, errors.E) {
 	// We read 128 bits.
 	data := [16]byte{}
 	_, err := io.ReadFull(r, data[:])
 	if err != nil {
-		panic(errors.WithStack(err))
+		return Identifier{}, errors.WithStack(err)
 	}
-	return Identifier(data)
+	return Identifier(data), nil
+}
+
+func MustFromReader(r io.Reader) Identifier {
+	i, err := FromReader(r)
+	if err != nil {
+		panic(err)
+	}
+	return i
 }
 
 // Valid returns true if id string looks like a valid identifier.
-func Valid(id string) (res bool) { //nolint:nonamedreturns
+func Valid(id string) bool {
 	if !idRegex.MatchString(id) {
 		return false
 	}
-	defer func() {
-		if recover() != nil {
-			res = false
-		}
-	}()
-	FromString(id)
-	return true
+	_, err := FromString(id)
+	return err == nil
 }
