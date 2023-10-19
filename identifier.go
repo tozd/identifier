@@ -1,4 +1,4 @@
-// Package provides functions to generate identifiers.
+// Package provides functions to generate and parse readable global identifiers.
 package identifier
 
 import (
@@ -23,6 +23,7 @@ var idRegex = regexp.MustCompile(`^[123456789ABCDEFGHJKLMNPQRSTUVWXYZabcdefghijk
 
 type Identifier [16]byte
 
+// String encodes Identifier value into a string using base 58 encoding.
 func (i Identifier) String() string {
 	res := base58.Encode(i[:])
 	if len(res) < stringLength {
@@ -44,11 +45,13 @@ func (i Identifier) MarshalText() ([]byte, error) {
 	return []byte(i.String()), nil
 }
 
-// FromUUID returns an UUID encoded as an identifier.
+// FromUUID returns the UUID encoded as an identifier.
 func FromUUID(data uuid.UUID) Identifier {
 	return Identifier(data)
 }
 
+// FromString parses a string-encoded identifier in base 58 encoding
+// into a corresponding Identifier value.
 func FromString(data string) (Identifier, errors.E) {
 	res := base58.Decode(data)
 	// Decode returns an empty slice if data contains a character outside of base58.
@@ -67,6 +70,7 @@ func FromString(data string) (Identifier, errors.E) {
 	return Identifier(*(*[16]byte)(res[len(res)-16:])), nil
 }
 
+// MustFromString is the same as FromString but panics on an error.
 func MustFromString(data string) Identifier {
 	i, err := FromString(data)
 	if err != nil {
@@ -80,7 +84,7 @@ func New() Identifier {
 	return MustFromReader(rand.Reader)
 }
 
-// NewRandom returns a new random identifier using r as a source of randomness.
+// FromReader returns a new random identifier using r as a source of randomness.
 func FromReader(r io.Reader) (Identifier, errors.E) {
 	// We read 128 bits.
 	data := [16]byte{}
@@ -91,6 +95,7 @@ func FromReader(r io.Reader) (Identifier, errors.E) {
 	return Identifier(data), nil
 }
 
+// MustFromReader is the same as FromReader but panics on an error.
 func MustFromReader(r io.Reader) Identifier {
 	i, err := FromReader(r)
 	if err != nil {
@@ -99,7 +104,7 @@ func MustFromReader(r io.Reader) Identifier {
 	return i
 }
 
-// Valid returns true if id string looks like a valid identifier.
+// Valid returns true if id string is a valid identifier.
 func Valid(id string) bool {
 	if !idRegex.MatchString(id) {
 		return false
