@@ -47,13 +47,13 @@ func FromString(data string) Identifier {
 	return Identifier(*(*[16]byte)(res[len(res)-16:]))
 }
 
-// NewRandom returns a new random identifier.
-func NewRandom() Identifier {
-	return NewRandomFromReader(rand.Reader)
+// New returns a new random identifier.
+func New() Identifier {
+	return FromReader(rand.Reader)
 }
 
 // NewRandom returns a new random identifier using r as a source of randomness.
-func NewRandomFromReader(r io.Reader) Identifier {
+func FromReader(r io.Reader) Identifier {
 	// We read 128 bits.
 	data := [16]byte{}
 	_, err := io.ReadFull(r, data[:])

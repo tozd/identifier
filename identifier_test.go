@@ -26,7 +26,7 @@ func TestFromUUID(t *testing.T) {
 
 func TestFromRandom(t *testing.T) {
 	for i := 0; i < 100000; i++ {
-		i := identifier.NewRandom()
+		i := identifier.New()
 		assert.Len(t, i, 16)
 		s := i.String()
 		assert.Len(t, s, 22)
