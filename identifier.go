@@ -47,6 +47,11 @@ func (i Identifier) MarshalText() ([]byte, error) {
 
 // FromUUID returns the UUID encoded as an identifier.
 func FromUUID(data uuid.UUID) Identifier {
+	return FromData(data)
+}
+
+// FromData returns 16 bytes data encoded as an identifier.
+func FromData(data [16]byte) Identifier {
 	return Identifier(data)
 }
 
