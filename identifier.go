@@ -27,6 +27,8 @@ type Identifier [16]byte
 func (i Identifier) String() string {
 	res := base58.Encode(i[:])
 	if len(res) < stringLength {
+		// String might be shorter than stringLength to encode 128 bits, in that
+		// we do zero left padding (character "1" in base58).
 		return strings.Repeat("1", stringLength-len(res)) + res
 	}
 	return res
@@ -58,14 +60,17 @@ func FromData(data [16]byte) Identifier {
 // FromString parses a string-encoded identifier in base 58 encoding
 // into a corresponding Identifier value.
 func FromString(data string) (Identifier, errors.E) {
+	if len(data) != stringLength {
+		return Identifier{}, errors.WithDetails(ErrInvalidIdentifier, "value", data)
+	}
 	res := base58.Decode(data)
 	// Decode returns an empty slice if data contains a character outside of base58.
 	// But we care about too short strings here too.
 	if len(res) < bytesMinLength {
 		return Identifier{}, errors.WithDetails(ErrInvalidIdentifier, "value", data)
 	}
-	// String might be too long, in that case we require extra bytes at the beginning
-	// to be zero (or character "1" in base58), i.e., zero left padding.
+	// String might longer than necessary to encode 128 bits, in that case we require extra bytes
+	// at the beginning to be zero (or character "1" in base58), i.e., zero left padding.
 	for i := 0; i+bytesMinLength < len(res); i++ {
 		if res[i] != 0 {
 			return Identifier{}, errors.WithDetails(ErrInvalidIdentifier, "value", data)
