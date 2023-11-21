@@ -25,7 +25,7 @@ fmt-ci: fmt
 	git diff --exit-code --color=always
 
 clean:
-	rm -rf coverage.* codeclimate.json tests.xml coverage
+	rm -f coverage.* codeclimate.json tests.xml
 
 release:
 	npx --yes --package 'release-it@15.4.2' --package '@release-it/keep-a-changelog@3.1.0' -- release-it
