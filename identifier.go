@@ -28,7 +28,7 @@ func (i Identifier) String() string {
 	res := base58.Encode(i[:])
 	if len(res) < stringLength {
 		// String might be shorter than stringLength to encode 128 bits, in that
-		// we do zero left padding (character "1" in base58).
+		// we do zero left padding (character "1" in base 58).
 		return strings.Repeat("1", stringLength-len(res)) + res
 	}
 	return res
@@ -47,12 +47,12 @@ func (i Identifier) MarshalText() ([]byte, error) {
 	return []byte(i.String()), nil
 }
 
-// FromUUID returns the UUID encoded as an identifier.
+// FromUUID returns the UUID encoded as an Identifier.
 func FromUUID(data uuid.UUID) Identifier {
 	return FromData(data)
 }
 
-// FromData returns 16 bytes data encoded as an identifier.
+// FromData returns 16 bytes data encoded as an Identifier.
 func FromData(data [16]byte) Identifier {
 	return Identifier(data)
 }
