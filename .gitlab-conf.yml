@@ -157,6 +157,10 @@ project:
   # already added to the project. (Introduced in GitLab 14.0.) Type: array
   topics:
     - go
+    - javascript
+    - typescript
+    - node
+    - web
   # One of disabled, private, or enabled. Type: string
   wiki_access_level: disabled
 avatar: ""
