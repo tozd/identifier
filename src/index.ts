@@ -17,7 +17,7 @@ export class Identifier {
 
   // toString encodes Identifier value into a string using base 58 encoding.
   public toString(): string {
-    let res = bs58.encode(this.value)
+    const res = bs58.encode(this.value)
     if (res.length < stringLength) {
       // String might be shorter than stringLength to encode 128 bits, in that
       // we do zero left padding (character "1" in base 58).
@@ -46,7 +46,7 @@ export class Identifier {
     if (data.length !== stringLength) {
       throw new Error("invalid identifier")
     }
-    let res = bs58.decode(data)
+    const res = bs58.decode(data)
     if (res.length < bytesMinLength) {
       throw new Error("invalid identifier")
     }
