@@ -64,19 +64,21 @@ export class Identifier {
   // new returns a new random identifier.
   public static new(): Identifier {
     const data = new Uint8Array(16)
-    self.crypto.getRandomValues(data)
+    crypto.getRandomValues(data)
     return this.fromData(data)
   }
-}
 
-export function valid(id: string): boolean {
-  if (!idRegex.test(id)) {
-    return false
-  }
-  try {
-    Identifier.fromString(id)
-    return true
-  } catch (error) {
-    return false
+  // valid returns true if id string is a valid identifier
+  // (fromString will not throw an exception).
+  public static valid(id: string): boolean {
+    if (!idRegex.test(id)) {
+      return false
+    }
+    try {
+      Identifier.fromString(id)
+      return true
+    } catch (error) {
+      return false
+    }
   }
 }

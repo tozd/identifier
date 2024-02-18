@@ -114,7 +114,8 @@ func MustFromReader(r io.Reader) Identifier {
 	return i
 }
 
-// Valid returns true if id string is a valid identifier.
+// Valid returns true if id string is a valid identifier
+// (FromString will not return an error).
 func Valid(id string) bool {
 	if !idRegex.MatchString(id) {
 		return false

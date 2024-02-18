@@ -27,4 +27,5 @@ dist-ssr
 tests.xml
 coverage.*
 codeclimate.json
+/coverage
 /keys.txt
