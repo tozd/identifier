@@ -17,7 +17,7 @@ Features:
 
 ## Installation
 
-### Go
+### Go installation
 
 You can add it to your project using `go get`:
 
@@ -27,7 +27,7 @@ go get gitlab.com/tozd/identifier
 
 It requires Go 1.17 or newer.
 
-### TypeScript/JavaScript
+### TypeScript/JavaScript installation
 
 You can add it to your project using `npm`:
 
@@ -39,11 +39,11 @@ It requires node 20 or newer. It works in browsers, too.
 
 ## Usage
 
-### Go
+### Go usage
 
 See full package documentation on [pkg.go.dev](https://pkg.go.dev/gitlab.com/tozd/identifier#section-documentation).
 
-### TypeScript/JavaScript
+### TypeScript/JavaScript usage
 
 TODO: [#2](https://gitlab.com/tozd/identifier/-/issues/2)
 
