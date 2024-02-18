@@ -45,7 +45,17 @@ See full package documentation on [pkg.go.dev](https://pkg.go.dev/gitlab.com/toz
 
 ### TypeScript/JavaScript usage
 
-TODO: [#2](https://gitlab.com/tozd/identifier/-/issues/2)
+```js
+import { Identifier } from "@tozd/identifier"
+
+const id = Identifier.new() // A random identifier.
+const s = id.toString()
+console.log(s)
+Identifier.valid(s) // True.
+Identifier.fromString(s) // Is equal to id.
+const u = Identifier.fromUUID("c97e2491-dd58-4a4e-b351-d786554e2ae6") // Is equal to Rt7JRSoDY1woPhLidZNvz1.
+JSON.stringify({ id }) // Works, id is converted to string.
+```
 
 ## Related projects
 
