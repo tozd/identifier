@@ -3,6 +3,14 @@
   "version": "0.2.0",
   "type": "module",
   "description": "Readable global identifiers.",
+  "license": "Apache-2.0",
+  "engines": {
+    "node": ">=20"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://gitlab.com/tozd/identifier.git"
+  },
   "module": "./dist/index.js",
   "types": "./dist/index.d.ts",
   "files": [
@@ -18,13 +26,9 @@
     "coverage": "vitest --coverage",
     "test-ci": "vitest run --reporter junit --reporter default --outputFile tests.xml --coverage"
   },
-  "license": "Apache-2.0",
-  "engines": {
-    "node": ">=20"
-  },
-  "repository": {
-    "type": "git",
-    "url": "https://gitlab.com/tozd/identifier.git"
+  "dependencies": {
+    "bs58": "^5.0.0",
+    "uuid": "^9.0.1"
   },
   "devDependencies": {
     "@types/uuid": "^9.0.8",
@@ -36,10 +40,6 @@
     "prettier": "^3.2.5",
     "typescript": "^5.3.3",
     "vitest": "^1.3.0"
-  },
-  "dependencies": {
-    "bs58": "^5.0.0",
-    "uuid": "^9.0.1"
   },
   "publishConfig": {
     "access": "public"
