@@ -25,7 +25,7 @@ You can add it to your project using `go get`:
 go get gitlab.com/tozd/identifier
 ```
 
-It requires Go 1.17 or newer.
+It requires Go 1.20 or newer.
 
 ### TypeScript/JavaScript installation
 

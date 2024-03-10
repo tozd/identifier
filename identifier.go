@@ -77,7 +77,7 @@ func FromString(data string) (Identifier, errors.E) {
 		}
 	}
 	// We take the last 16 bytes.
-	return Identifier(*(*[16]byte)(res[len(res)-16:])), nil
+	return Identifier([16]byte(res[len(res)-16:])), nil
 }
 
 // MustFromString is the same as FromString but panics on an error.
