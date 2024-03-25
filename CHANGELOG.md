@@ -12,6 +12,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Optimize Go identifier creation from string.
 - Requires Go 1.20.
 
+### Fixed
+
+- Specify `main` in `package.json`.
+
 ## [0.2.0] - 2024-02-18
 
 ### Added
