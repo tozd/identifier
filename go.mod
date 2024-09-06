@@ -1,15 +1,17 @@
 module gitlab.com/tozd/identifier
 
-go 1.20
+go 1.23
+
+toolchain go1.23.1
 
 require (
-	github.com/google/uuid v1.3.1
-	github.com/stretchr/testify v1.8.4
+	github.com/google/uuid v1.6.0
+	github.com/stretchr/testify v1.9.0
 )
 
 require (
 	github.com/btcsuite/btcutil v1.0.2
-	gitlab.com/tozd/go/errors v0.8.0
+	gitlab.com/tozd/go/errors v0.9.0
 )
 
 require (

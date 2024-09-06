@@ -24,8 +24,8 @@ func TestFromUUID(t *testing.T) {
 		s := i.String()
 		assert.Len(t, s, 22)
 		require.True(t, identifier.Valid(s))
-		ii, err := identifier.FromString(s)
-		assert.NoError(t, err)
+		ii, errE := identifier.FromString(s)
+		require.NoError(t, errE, "% -+#.1v", errE)
 		assert.Equal(t, i, ii)
 	}
 }
@@ -39,8 +39,8 @@ func TestNew(t *testing.T) {
 		s := i.String()
 		assert.Len(t, s, 22)
 		require.True(t, identifier.Valid(s))
-		ii, err := identifier.FromString(s)
-		assert.NoError(t, err)
+		ii, errE := identifier.FromString(s)
+		require.NoError(t, errE, "% -+#.1v", errE)
 		assert.Equal(t, i, ii)
 	}
 }
@@ -69,20 +69,20 @@ func TestJSON(t *testing.T) {
 		ID: identifier.New(),
 	}
 	data, err := json.Marshal(x)
-	assert.NoError(t, err)
+	require.NoError(t, err)
 	assert.Equal(t, `{"id":"`+x.ID.String()+`"}`, string(data))
 	var y testStruct
 	err = json.Unmarshal(data, &y)
-	assert.NoError(t, err)
+	require.NoError(t, err)
 	assert.Equal(t, x.ID, y.ID)
 }
 
 func TestFromStringError(t *testing.T) {
 	t.Parallel()
 
-	_, err := identifier.FromString("xxx")
-	assert.Error(t, err)
-	assert.Equal(t, "xxx", errors.AllDetails(err)["value"])
+	_, errE := identifier.FromString("xxx")
+	require.Error(t, errE, "% -+#.1v", errE)
+	assert.Equal(t, "xxx", errors.AllDetails(errE)["value"])
 
 	assert.PanicsWithError(t, identifier.ErrInvalidIdentifier.Error(), func() {
 		identifier.MustFromString("xxx")
