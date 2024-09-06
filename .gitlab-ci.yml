@@ -42,7 +42,7 @@ test_go:
 test_node:
   stage: test
 
-  image: node:20.9-alpine3.18
+  image: node:20.17-alpine3.19
 
   script:
     - npm ci --audit=false
@@ -84,7 +84,7 @@ lint_go:
 lint_node:
   stage: test
 
-  image: node:20.9-alpine3.18
+  image: node:20.17-alpine3.19
 
   before_script:
     - apk --update add git
@@ -110,7 +110,7 @@ fmt_go:
 fmt_node:
   stage: test
 
-  image: node:20.9-alpine3.18
+  image: node:20.17-alpine3.19
 
   before_script:
     - apk --update add git
@@ -146,7 +146,7 @@ audit_go:
 audit_node:
   stage: test
 
-  image: node:20.9-alpine3.18
+  image: node:20.17-alpine3.19
 
   script:
     - npm audit
