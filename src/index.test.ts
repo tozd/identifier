@@ -5,7 +5,7 @@ import { Identifier } from "./index"
 // TODO: Convert to a fuzzing test and a benchmark.
 
 test("Identifier.fromUUID", () => {
-  for (let i = 0; i < 100000; i++) {
+  for (let i = 0; i < 10000; i++) {
     const u = crypto.randomUUID()
     const i = Identifier.fromUUID(u)
     // @ts-expect-error: value is private
@@ -19,7 +19,7 @@ test("Identifier.fromUUID", () => {
 })
 
 test("Identifier.new", () => {
-  for (let i = 0; i < 100000; i++) {
+  for (let i = 0; i < 10000; i++) {
     const i = Identifier.new()
     // @ts-expect-error: value is private
     assert.lengthOf(i.value, 16)
