@@ -95,5 +95,5 @@ func TestGoStringer(t *testing.T) {
 
 	i := identifier.String("Xuw7QMx5Qqee5jn6ddXCrc")
 	s := fmt.Sprintf("%#v", i)
-	assert.Equal(t, `identifier.String{"Xuw7QMx5Qqee5jn6ddXCrc"}`, s)
+	assert.Equal(t, `identifier.String("Xuw7QMx5Qqee5jn6ddXCrc")`, s)
 }
