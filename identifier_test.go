@@ -20,12 +20,12 @@ func TestFromUUID(t *testing.T) {
 
 	for i := 0; i < 100000; i++ {
 		u := uuid.New()
-		i := identifier.FromUUID(u)
+		i := identifier.UUID(u)
 		assert.Len(t, i, 16)
 		s := i.String()
 		assert.Len(t, s, 22)
 		require.True(t, identifier.Valid(s))
-		ii, errE := identifier.FromString(s)
+		ii, errE := identifier.MaybeString(s)
 		require.NoError(t, errE, "% -+#.1v", errE)
 		assert.Equal(t, i, ii)
 	}
@@ -40,7 +40,7 @@ func TestNew(t *testing.T) {
 		s := i.String()
 		assert.Len(t, s, 22)
 		require.True(t, identifier.Valid(s))
-		ii, errE := identifier.FromString(s)
+		ii, errE := identifier.MaybeString(s)
 		require.NoError(t, errE, "% -+#.1v", errE)
 		assert.Equal(t, i, ii)
 	}
@@ -81,19 +81,19 @@ func TestJSON(t *testing.T) {
 func TestFromStringError(t *testing.T) {
 	t.Parallel()
 
-	_, errE := identifier.FromString("xxx")
+	_, errE := identifier.MaybeString("xxx")
 	require.Error(t, errE, "% -+#.1v", errE)
 	assert.Equal(t, "xxx", errors.AllDetails(errE)["value"])
 
 	assert.PanicsWithError(t, identifier.ErrInvalidIdentifier.Error(), func() {
-		identifier.MustFromString("xxx")
+		identifier.String("xxx")
 	})
 }
 
 func TestGoStringer(t *testing.T) {
 	t.Parallel()
 
-	i := identifier.MustFromString("Xuw7QMx5Qqee5jn6ddXCrc")
+	i := identifier.String("Xuw7QMx5Qqee5jn6ddXCrc")
 	s := fmt.Sprintf("%#v", i)
 	assert.Equal(t, `identifier.Identifier{"Xuw7QMx5Qqee5jn6ddXCrc"}`, s)
 }

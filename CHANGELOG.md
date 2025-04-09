@@ -7,6 +7,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Changed
+
+- Renamed in Go: `FromUUID` to `UUID`, `FromData` to `Data`,
+  `FromString` to `MaybeString`, and `MustFromString` to `String`.
+
 ## [0.5.0] - 2025-04-09
 
 ### Changed

@@ -35,7 +35,7 @@ func (i Identifier) String() string {
 }
 
 func (i *Identifier) UnmarshalText(text []byte) error {
-	ii, err := FromString(string(text))
+	ii, err := MaybeString(string(text))
 	if err != nil {
 		return err
 	}
@@ -48,22 +48,22 @@ func (i Identifier) MarshalText() ([]byte, error) {
 }
 
 func (i Identifier) GoString() string {
-	return `identifier.Identifier{"` + i.String() + `"}`
+	return `identifier.String("` + i.String() + `")`
 }
 
-// FromUUID returns the UUID encoded as an Identifier.
-func FromUUID(data uuid.UUID) Identifier {
-	return FromData(data)
+// UUID returns the UUID encoded as an Identifier.
+func UUID(data uuid.UUID) Identifier {
+	return Data(data)
 }
 
-// FromData returns 16 bytes data encoded as an Identifier.
-func FromData(data [16]byte) Identifier {
+// Data returns 16 bytes data encoded as an Identifier.
+func Data(data [16]byte) Identifier {
 	return Identifier(data)
 }
 
-// FromString parses a string-encoded identifier in base 58 encoding
+// MaybeString parses a string-encoded identifier in base 58 encoding
 // into a corresponding Identifier value.
-func FromString(data string) (Identifier, errors.E) {
+func MaybeString(data string) (Identifier, errors.E) {
 	if len(data) != stringLength {
 		return Identifier{}, errors.WithDetails(ErrInvalidIdentifier, "value", data)
 	}
@@ -84,9 +84,9 @@ func FromString(data string) (Identifier, errors.E) {
 	return Identifier([16]byte(res[len(res)-16:])), nil
 }
 
-// MustFromString is the same as FromString but panics on an error.
-func MustFromString(data string) Identifier {
-	i, err := FromString(data)
+// String is the same as MaybeString but panics on an error.
+func String(data string) Identifier {
+	i, err := MaybeString(data)
 	if err != nil {
 		panic(err)
 	}
@@ -119,11 +119,11 @@ func MustFromReader(r io.Reader) Identifier {
 }
 
 // Valid returns true if id string is a valid identifier
-// (FromString will not return an error).
+// (MaybeString will not return an error).
 func Valid(id string) bool {
 	if !idRegex.MatchString(id) {
 		return false
 	}
-	_, err := FromString(id)
+	_, err := MaybeString(id)
 	return err == nil
 }
