@@ -47,6 +47,10 @@ func (i Identifier) MarshalText() ([]byte, error) {
 	return []byte(i.String()), nil
 }
 
+func (i Identifier) GoString() string {
+	return `identifier.Identifier{"` + i.String() + `"}`
+}
+
 // FromUUID returns the UUID encoded as an Identifier.
 func FromUUID(data uuid.UUID) Identifier {
 	return FromData(data)

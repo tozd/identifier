@@ -2,6 +2,7 @@ package identifier_test
 
 import (
 	"encoding/json"
+	"fmt"
 	"testing"
 
 	"github.com/google/uuid"
@@ -87,4 +88,12 @@ func TestFromStringError(t *testing.T) {
 	assert.PanicsWithError(t, identifier.ErrInvalidIdentifier.Error(), func() {
 		identifier.MustFromString("xxx")
 	})
+}
+
+func TestGoStringer(t *testing.T) {
+	t.Parallel()
+
+	i := identifier.MustFromString("Xuw7QMx5Qqee5jn6ddXCrc")
+	s := fmt.Sprintf("%#v", i)
+	assert.Equal(t, `identifier.Identifier{"Xuw7QMx5Qqee5jn6ddXCrc"}`, s)
 }
