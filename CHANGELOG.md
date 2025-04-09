@@ -7,6 +7,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.6.0] - 2025-04-09
+
 ### Changed
 
 - Renamed in Go: `FromUUID` to `UUID`, `FromData` to `Data`,
@@ -53,7 +55,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - First public release.
 
-[unreleased]: https://gitlab.com/tozd/identifier/-/compare/v0.5.0...main
+[unreleased]: https://gitlab.com/tozd/identifier/-/compare/v0.6.0...main
+[0.6.0]: https://gitlab.com/tozd/identifier/-/compare/v0.5.0...v0.6.0
 [0.5.0]: https://gitlab.com/tozd/identifier/-/compare/v0.4.0...v0.5.0
 [0.4.0]: https://gitlab.com/tozd/identifier/-/compare/v0.3.0...v0.4.0
 [0.3.0]: https://gitlab.com/tozd/identifier/-/compare/v0.2.0...v0.3.0
