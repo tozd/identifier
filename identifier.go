@@ -1,4 +1,4 @@
-// Package provides functions to generate and parse readable global identifiers.
+// Package identifier provides functions to generate and parse readable global identifiers.
 package identifier
 
 import (
@@ -21,6 +21,9 @@ var ErrInvalidIdentifier = errors.Base("invalid identifier")
 
 var idRegex = regexp.MustCompile(`^[123456789ABCDEFGHJKLMNPQRSTUVWXYZabcdefghijkmnopqrstuvwxyz]{22}$`)
 
+// Identifier is a 128-bit identifier.
+//
+//nolint:recvcheck
 type Identifier [16]byte
 
 // String encodes Identifier value into a string using base 58 encoding.
@@ -34,6 +37,7 @@ func (i Identifier) String() string {
 	return res
 }
 
+// UnmarshalText implements encoding.TextUnmarshaler interface for Identifier.
 func (i *Identifier) UnmarshalText(text []byte) error {
 	ii, err := MaybeString(string(text))
 	if err != nil {
@@ -43,10 +47,12 @@ func (i *Identifier) UnmarshalText(text []byte) error {
 	return nil
 }
 
+// MarshalText implements encoding.TextMarshaler interface for Identifier.
 func (i Identifier) MarshalText() ([]byte, error) {
 	return []byte(i.String()), nil
 }
 
+// GoString implements fmt.GoStringer interface for Identifier.
 func (i Identifier) GoString() string {
 	return `identifier.String("` + i.String() + `")`
 }
