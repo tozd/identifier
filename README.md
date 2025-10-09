@@ -25,7 +25,7 @@ You can add it to your project using `go get`:
 go get gitlab.com/tozd/identifier
 ```
 
-It requires Go 1.23 or newer.
+It requires Go 1.24 or newer.
 
 ### TypeScript/JavaScript installation
 
@@ -35,7 +35,7 @@ You can add it to your project using `npm`:
 npm install --save @tozd/identifer
 ```
 
-It requires node 20 or newer. It works in browsers, too.
+It requires node 22 or newer. It works in browsers, too.
 
 ## Usage
 
