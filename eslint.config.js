@@ -13,7 +13,6 @@ const gitignorePath = path.resolve(__dirname, ".gitignore");
 export default tseslint.config(
   eslint.configs.recommended,
   ...tseslint.configs.recommended,
-  eslintConfigPrettier,
   includeIgnoreFile(gitignorePath),
   {
     files: ["**/*.ts"],
@@ -35,6 +34,10 @@ export default tseslint.config(
         ...globals.browser,
         ...globals.es2025,
       },
+      parserOptions: {
+        parser: tseslint.parser,
+      },
     },
   },
+  eslintConfigPrettier,
 )
