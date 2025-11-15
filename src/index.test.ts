@@ -1,6 +1,6 @@
 import { assert, test } from "vitest"
 
-import { Identifier } from "./index"
+import { Identifier } from "./index.ts"
 
 // TODO: Convert to a fuzzing test and a benchmark.
 
@@ -49,12 +49,12 @@ test("Identifier.toJSON", () => {
   const o = { id: i }
   const data = JSON.stringify(o)
   assert.equal(data, `{"id":"${i.toString()}"}`)
-  const obj = JSON.parse(data, (key, value) => {
+  const obj = JSON.parse(data, (key: string, value: unknown) => {
     if (key === "id") {
-      return Identifier.fromString(value)
+      return Identifier.fromString(value as string)
     }
     return value
-  })
+  }) as unknown
   assert.deepEqual(obj, o)
 })
 
