@@ -7,27 +7,27 @@ import { Identifier } from "./index"
 test("Identifier.fromUUID", () => {
   for (let i = 0; i < 10000; i++) {
     const u = crypto.randomUUID()
-    const i = Identifier.fromUUID(u)
+    const id = Identifier.fromUUID(u)
     // @ts-expect-error: value is private
-    assert.lengthOf(i.value, 16)
-    const s = i.toString()
+    assert.lengthOf(id.value, 16)
+    const s = id.toString()
     assert.lengthOf(s, 22)
     assert.isTrue(Identifier.valid(s))
     const ii = Identifier.fromString(s)
-    assert.deepEqual(i, ii)
+    assert.deepEqual(id, ii)
   }
 })
 
 test("Identifier.new", () => {
   for (let i = 0; i < 10000; i++) {
-    const i = Identifier.new()
+    const id = Identifier.new()
     // @ts-expect-error: value is private
-    assert.lengthOf(i.value, 16)
-    const s = i.toString()
+    assert.lengthOf(id.value, 16)
+    const s = id.toString()
     assert.lengthOf(s, 22)
     assert.isTrue(Identifier.valid(s))
     const ii = Identifier.fromString(s)
-    assert.deepEqual(i, ii)
+    assert.deepEqual(id, ii)
   }
 })
 

@@ -12,13 +12,14 @@ const gitignorePath = path.resolve(__dirname, ".gitignore");
 
 export default tseslint.config(
   eslint.configs.recommended,
-  ...tseslint.configs.recommended,
+  ...tseslint.configs.recommendedTypeChecked,
   includeIgnoreFile(gitignorePath),
   {
     files: ["**/*.ts"],
     rules: {
       "no-unused-vars": "off",
       "no-undef": "off",
+      "@typescript-eslint/switch-exhaustiveness-check": "error",
       "@typescript-eslint/no-unused-vars": [
         "error",
         {
@@ -36,6 +37,10 @@ export default tseslint.config(
       },
       parserOptions: {
         parser: tseslint.parser,
+        projectService: {
+          allowDefaultProject: ["src/*.test.ts"],
+        },
+        tsconfigRootDir: __dirname,
       },
     },
   },
