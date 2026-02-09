@@ -81,4 +81,37 @@ export class Identifier {
       return false
     }
   }
+
+  // from generates a deterministic identifier from one or more string values using iterative SHA-256 hashing.
+  //
+  // Each value is normalized using Unicode NFC normalization before hashing. The function computes
+  // hash = SHA256(normalize(values[0])), then hash = SHA256(hash + normalize(values[1])), and so on.
+  // The final identifier is derived from the first 128 bits of the resulting hash.
+  //
+  // Different values or different orderings produce different identifiers.
+  public static async from(...values: string[]): Promise<Identifier> {
+    const encoder = new TextEncoder()
+    let hash: Uint8Array | undefined
+    for (const value of values) {
+      // Normalize the string using NFC.
+      const normalized = value.normalize("NFC")
+      const normalizedBytes = encoder.encode(normalized)
+
+      if (hash === undefined) {
+        // First iteration: hash just the normalized value.
+        const hashBuffer = await crypto.subtle.digest("SHA-256", normalizedBytes)
+        hash = new Uint8Array(hashBuffer)
+      } else {
+        // Subsequent iterations: hash = SHA256(hash + normalized).
+        const combined = new Uint8Array(hash.length + normalizedBytes.length)
+        combined.set(hash)
+        combined.set(normalizedBytes, hash.length)
+        const hashBuffer = await crypto.subtle.digest("SHA-256", combined)
+        hash = new Uint8Array(hashBuffer)
+      }
+    }
+
+    // Take first 128 bits (16 bytes) of the final hash.
+    return new Identifier(hash!.slice(0, 16))
+  }
 }
