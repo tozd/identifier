@@ -155,8 +155,8 @@ func From(values ...string) Identifier {
 			hash = h[:]
 		} else {
 			// Subsequent iterations: hash = sha256(hash + normalized).
-			combined := append(hash, []byte(normalized)...)
-			h := sha256.Sum256(combined)
+			hash = append(hash, []byte(normalized)...)
+			h := sha256.Sum256(hash)
 			hash = h[:]
 		}
 	}
