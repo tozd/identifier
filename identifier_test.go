@@ -97,3 +97,119 @@ func TestGoStringer(t *testing.T) {
 	s := fmt.Sprintf("%#v", i)
 	assert.Equal(t, `identifier.String("Xuw7QMx5Qqee5jn6ddXCrc")`, s)
 }
+
+func TestFrom(t *testing.T) {
+	t.Parallel()
+
+	t.Run("produces valid identifier", func(t *testing.T) {
+		t.Parallel()
+
+		i := identifier.From("test")
+		assert.Len(t, i, 16)
+		s := i.String()
+		assert.Len(t, s, 22)
+		require.True(t, identifier.Valid(s))
+		assert.Equal(t, "LhYXZThRsu1RXG5ddRZiUt", s)
+	})
+
+	t.Run("deterministic", func(t *testing.T) {
+		t.Parallel()
+
+		i1 := identifier.From("value1", "value2", "value3")
+		i2 := identifier.From("value1", "value2", "value3")
+		assert.Equal(t, i1, i2)
+		assert.Equal(t, "UhsHqGT45sDirscEZLxmC3", i1.String())
+	})
+
+	t.Run("different inputs produce different outputs", func(t *testing.T) {
+		t.Parallel()
+
+		i1 := identifier.From("value1")
+		i2 := identifier.From("value2")
+		assert.NotEqual(t, i1, i2)
+		assert.Equal(t, "8UwJ16f3LZEDo1EWEPR1Ua", i1.String())
+		assert.Equal(t, "1eNbijZLjE6RCP9J3v6yz1", i2.String())
+	})
+
+	t.Run("order matters", func(t *testing.T) {
+		t.Parallel()
+
+		i1 := identifier.From("value1", "value2")
+		i2 := identifier.From("value2", "value1")
+		assert.NotEqual(t, i1, i2)
+		assert.Equal(t, "ReKxivb3BXqpCurBhx657A", i1.String())
+		assert.Equal(t, "FtRyFysugNvJjVkMztmAuW", i2.String())
+	})
+
+	t.Run("single vs multiple values", func(t *testing.T) {
+		t.Parallel()
+
+		i1 := identifier.From("value1value2")
+		i2 := identifier.From("value1", "value2")
+		assert.NotEqual(t, i1, i2)
+		assert.Equal(t, "21DW9wo4kBwGXVxbPW69oQ", i1.String())
+		assert.Equal(t, "ReKxivb3BXqpCurBhx657A", i2.String())
+	})
+
+	t.Run("empty string", func(t *testing.T) {
+		t.Parallel()
+
+		i := identifier.From("")
+		assert.Len(t, i, 16)
+		s := i.String()
+		require.True(t, identifier.Valid(s))
+		assert.Equal(t, "V7jseQevszwMPhi4evidTR", s)
+	})
+
+	t.Run("multiple empty strings", func(t *testing.T) {
+		t.Parallel()
+
+		i1 := identifier.From("", "")
+		i2 := identifier.From("")
+		assert.NotEqual(t, i1, i2)
+		assert.Equal(t, "Cbyu7w2KmnA6ZJVbgsHpHH", i1.String())
+		assert.Equal(t, "V7jseQevszwMPhi4evidTR", i2.String())
+	})
+
+	t.Run("unicode normalization NFC", func(t *testing.T) {
+		t.Parallel()
+
+		// U+00E9 (é) vs U+0065 U+0301 (e + combining acute accent)
+		// Both should normalize to U+00E9 in NFC.
+		i1 := identifier.From("\u00e9")       // é as single character.
+		i2 := identifier.From("\u0065\u0301") // e + combining acute.
+		assert.Equal(t, i1, i2, "NFC normalization should make these equal")
+		assert.Equal(t, "ADHVGvUx5PLGDsjwjY5BA9", i1.String())
+	})
+
+	t.Run("specific known values", func(t *testing.T) {
+		t.Parallel()
+
+		// Test with known values to ensure consistency across implementations.
+		i := identifier.From("test", "value")
+		s := i.String()
+		// This is just to verify the implementation produces consistent results.
+		assert.Len(t, s, 22)
+		require.True(t, identifier.Valid(s))
+		assert.Equal(t, "J1oVAcLajL9m5GgBJ1eeqz", s)
+
+		// Same input should always produce same output.
+		i2 := identifier.From("test", "value")
+		assert.Equal(t, i, i2)
+	})
+
+	t.Run("cascading hash", func(t *testing.T) {
+		t.Parallel()
+
+		// Each additional value should change the hash.
+		i1 := identifier.From("a")
+		i2 := identifier.From("a", "b")
+		i3 := identifier.From("a", "b", "c")
+		assert.NotEqual(t, i1, i2)
+		assert.NotEqual(t, i2, i3)
+		assert.NotEqual(t, i1, i3)
+		assert.Equal(t, "S1yrYnjHbfbiTySsN9h1eC", i1.String())
+		assert.Equal(t, "KorZ8VDpKQvHrZd2njXraU", i2.String())
+		assert.Equal(t, "469q6wDNXV222gSefVXCrJ", i3.String())
+	})
+}

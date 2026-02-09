@@ -1,12 +1,13 @@
 module gitlab.com/tozd/identifier
 
-go 1.24
+go 1.24.0
 
 require (
 	github.com/btcsuite/btcd/btcutil v1.1.6
 	github.com/google/uuid v1.6.0
 	github.com/stretchr/testify v1.11.1
 	gitlab.com/tozd/go/errors v0.10.0
+	golang.org/x/text v0.33.0
 )
 
 require (

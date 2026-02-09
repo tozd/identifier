@@ -3,6 +3,7 @@ package identifier
 
 import (
 	"crypto/rand"
+	"crypto/sha256"
 	"io"
 	"regexp"
 	"strings"
@@ -10,6 +11,7 @@ import (
 	"github.com/btcsuite/btcd/btcutil/base58"
 	"github.com/google/uuid"
 	"gitlab.com/tozd/go/errors"
+	"golang.org/x/text/unicode/norm"
 )
 
 const (
@@ -132,4 +134,35 @@ func Valid(id string) bool {
 	}
 	_, err := MaybeString(id)
 	return err == nil
+}
+
+// From generates a deterministic identifier from one or more string values using iterative SHA-256 hashing.
+//
+// Each value is normalized using Unicode NFC normalization before hashing. The function computes
+// hash = SHA256(normalize(values[0])), then hash = SHA256(hash + normalize(values[1])), and so on.
+// The final identifier is derived from the first 128 bits of the resulting hash.
+//
+// Different values or different orderings produce different identifiers.
+func From(values ...string) Identifier {
+	var hash []byte
+	for i, value := range values {
+		// Normalize the string using NFC.
+		normalized := norm.NFC.String(value)
+
+		if i == 0 {
+			// First iteration: hash just the normalized value.
+			h := sha256.Sum256([]byte(normalized))
+			hash = h[:]
+		} else {
+			// Subsequent iterations: hash = sha256(hash + normalized).
+			combined := append(hash, []byte(normalized)...)
+			h := sha256.Sum256(combined)
+			hash = h[:]
+		}
+	}
+
+	// Take first 128 bits (16 bytes) of the final hash.
+	var result [16]byte
+	copy(result[:], hash[:16])
+	return Identifier(result)
 }
