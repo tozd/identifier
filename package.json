@@ -26,7 +26,8 @@
     "test": "vitest",
     "coverage": "vitest --coverage",
     "test-ci": "vitest run --reporter junit --reporter default --outputFile tests.xml --coverage",
-    "upgrade": "ncu -u"
+    "upgrade": "ncu -u",
+    "prepare": "npm run build"
   },
   "dependencies": {
     "bs58": "^6.0.0",
